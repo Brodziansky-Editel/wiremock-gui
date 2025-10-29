@@ -47,14 +47,10 @@ This tool provides a clean, intuitive interface for QA teams to:
 Create a `.env` file in the project root with your WireMock instances:
 
 ```env
-REACT_APP_WIREMOCK_URL_1=Stage|https://wiremock.stage.example.com/__admin
-REACT_APP_WIREMOCK_URL_2=QA01|https://wiremock.qa01.example.com/__admin
-REACT_APP_WIREMOCK_URL_3=QA02|https://wiremock.qa02.example.com/__admin
-REACT_APP_WIREMOCK_URL_4=QA03|https://wiremock.qa03.example.com/__admin
-REACT_APP_WIREMOCK_URL_5=QA04|https://wiremock.qa04.example.com/__admin
+REACT_APP_WIREMOCK_URLS=Stage|https://wiremock.stage.example.com/__admin;QA01|https://wiremock.qa01.example.com/__admin;QA02|https://wiremock.qa02.example.com/__admin;QA03|https://wiremock.qa03.example.com/__admin;QA04|https://wiremock.qa04.example.com/__admin
 ```
 
-Format: `REACT_APP_WIREMOCK_URL_N=Name|BaseURL`
+Format: `Name|BaseURL` separated by semicolons (`;`)
 
 **Important:** URLs should end with `/__admin` (not `/__admin/requests` or `/__admin/mappings`)
 
@@ -80,11 +76,13 @@ npm run build
 
 ## Docker Deployment
 
-Build the Docker image:
+Build the Docker image using the provided script:
 
 ```bash
-docker build -t wiremock-gui .
+./build.sh
 ```
+
+This script automatically reads your `.env` file and passes the WireMock URLs to the Docker build process.
 
 Run the container:
 
@@ -93,6 +91,8 @@ docker run -p 8080:80 wiremock-gui
 ```
 
 Access at `http://localhost:8080`
+
+**Note:** Environment variables are baked into the React build at build time. If you change `.env`, you need to rebuild the Docker image.
 
 ## Technology Stack
 

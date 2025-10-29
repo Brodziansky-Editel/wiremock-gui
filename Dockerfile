@@ -1,5 +1,5 @@
 # Build stage
-FROM node:23-alpine as build
+FROM node:23-alpine AS build
 
 WORKDIR /app
 
@@ -8,6 +8,9 @@ COPY package*.json ./
 
 # Install dependencies
 RUN npm ci --only=production
+
+# Build arg for environment variable
+ARG REACT_APP_WIREMOCK_URLS
 
 # Copy source files
 COPY . .

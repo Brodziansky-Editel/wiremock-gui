@@ -4,21 +4,13 @@ import Cookies from 'js-cookie';
 
 // Parse WireMock URLs from environment variables
 const getWireMockUrls = () => {
-    const urls = [];
-    let index = 1;
+    const envValue = process.env.REACT_APP_WIREMOCK_URLS;
+    if (!envValue) return [];
     
-    while (true) {
-        const envValue = process.env[`REACT_APP_WIREMOCK_URL_${index}`];
-        if (!envValue) break;
-        
-        const [name, url] = envValue.split('|');
-        if (name && url) {
-            urls.push({ id: index, name: name.trim(), url: url.trim() });
-        }
-        index++;
-    }
-    
-    return urls;
+    return envValue.split(';').map((entry, index) => {
+        const [name, url] = entry.split('|');
+        return { id: index + 1, name: name.trim(), url: url.trim() };
+    }).filter(item => item.name && item.url);
 };
 
 const URLSelector = ({ selectedUrl, onUrlChange }) => {
